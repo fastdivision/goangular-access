@@ -1,0 +1,23 @@
+{
+  "name": "goangular-access",
+  "main": "goangular-access.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/fastdivision/goangular-access",
+  "authors": [
+    "Jake Johnson <jake@divshot.com>"
+  ],
+  "description": "A tiny module for handling GoAngular route security, permissions, and an access directive.",
+  "keywords": [
+    "GoInstant",
+    "GoAngular",
+    "AngularJS"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
