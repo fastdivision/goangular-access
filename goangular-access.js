@@ -52,13 +52,14 @@
   });
 
   app.run(function ($injector, $location, $rootScope, $goConnection, $goPermissions, loginRedirectPath) {
-    if ($injector.has('$state')) {
-      new RouteSecurityManager($location, $rootScope, $injector.get('$state'), $goConnection, $goPermissions, loginRedirectPath);
-    }
+    var router = $injector.has('$route') ? $injector.get('$route') : $injector.get('$state');
+    var routerEvent = $injector.has('$route') ? '$routeChangeStart' : '$stateChangeStart';
+    new RouteSecurityManager($location, $rootScope, router, routerEvent, $goConnection, $goPermissions, loginRedirectPath);
   });
 
-  function RouteSecurityManager($location, $rootScope, $state, $goConnection, $goPermissions, path) {
-    this._state = $state;
+  function RouteSecurityManager($location, $rootScope, router, routerEvent, $goConnection, $goPermissions, path) {
+    this._router = router;
+    this._routerEvent = routerEvent;
     this._location = $location;
     this._rootScope = $rootScope;
     this._goConnection = $goConnection;
@@ -71,17 +72,18 @@
   RouteSecurityManager.prototype = {
     _init: function () {
       var self = this;
+
       this._goConnection.$ready().then(function() {
         self._checkCurrent();
-        self._rootScope.$on('$stateChangeStart', function (e, next) {
+        self._rootScope.$on(self._routerEvent, function (e, next) {
           self._authRequiredRedirect(next, self._loginPath);
         });
       });
     },
 
     _checkCurrent: function () {
-      if (this._state.current) {
-        this._authRequiredRedirect(this._state.current, this._loginPath);
+      if (this._router.current) {
+        this._authRequiredRedirect(this._router.current, this._loginPath);
       }
     },
 
@@ -90,16 +92,16 @@
       this._location.path(path);
     },
 
-    _authRequiredRedirect: function (state, path) {
-      if (state.access && !this._permissions.authorized(state.access)) {
-        if (state.pathTo === undefined) {
+    _authRequiredRedirect: function (router, path) {
+      if (router.access && !this._permissions.authorized(router.access)) {
+        if (router.pathTo === undefined) {
           this._redirectTo = this._location.path();
         } else {
-          this._redirectTo = state.pathTo === path ? '/' : state.pathTo;
+          this._redirectTo = router.pathTo === path ? '/' : router.pathTo;
         }
         this._redirect(path);
       }
-      else if (this._permissions.authorized(state.access) && this._location.path() === this._loginPath) {
+      else if (this._permissions.authorized(router.access) && this._location.path() === this._loginPath) {
         this._redirect('/');
       }
     }
