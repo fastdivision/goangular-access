@@ -1,6 +1,6 @@
 # GoAngular Access
 
-Access is a tiny module for handling route security, permissions and the `access` directive in a GoAngular app. It provides support for ui-router and ngRoute out of the box without cluttering your controllers. The `permissions` service and `access` directive are similar to those provided in the official GoInstant [documentation](https://developers.goinstant.com/v1/GoAngular/examples/auth.html). I added them to save time building new apps.
+Access is a tiny module for handling route security, permissions and the `access` directive in a GoAngular app. It provides support for [ui-router](https://github.com/angular-ui/ui-router) and ngRoute out of the box without cluttering your controllers. The `permissions` service and `access` directive are similar to those provided in the official GoInstant [documentation](https://developers.goinstant.com/v1/GoAngular/examples/auth.html). I added them to save time building new apps.
 
 **Requirements:** GoInstant and GoAngular
 
